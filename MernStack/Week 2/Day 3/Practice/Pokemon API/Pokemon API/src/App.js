@@ -1,25 +1,28 @@
-import { useState } from "react"
+import { useState, useEffect } from "react";
+import axios from "axios";
 import './App.css';
 
 function App() {
   const [allHeroes, setAllHeroes] = useState([]);
 
+  useEffect(() => {
+    fetchSuperHeroes();
+  }, []);
+
   const fetchSuperHeroes = () => {
-    fetch("https://pokeapi.co/api/v2/pokemon")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setAllHeroes(data.results);
+    axios.get("https://pokeapi.co/api/v2/pokemon")
+      .then((response) => {
+        console.log(response.data.results);
+        setAllHeroes(response.data.results);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.error(error);
       });
   };
   
   return (
     <div className="App">
       <h1>Fetching Pokémon</h1>
-      <button onClick={fetchSuperHeroes}>Fetch Pokémon</button>
       
       {allHeroes.length > 0 && (
         <div>
